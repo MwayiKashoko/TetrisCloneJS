@@ -992,7 +992,7 @@ window.onload = () => {
     }
 
     let titleScreenImage = new Image();
-    titleScreenImage.src = "Images/TitleScreen.png";
+    titleScreenImage.src = "Images/titleScreen.png";
     let title = new Image();
     title.src = "Images/tetris.svg";
 
