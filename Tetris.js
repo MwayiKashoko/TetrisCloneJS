@@ -36,19 +36,12 @@ window.onload = () => {
 
     const hud = document.getElementById("hud");
     const ctx = hud.getContext("2d");
-(function() {
-	const random = (min, max) => {
-		return Math.floor(Math.random() * (max-min+1)) + min;
-	};
 
     let downPressed = false;
     let score = 0;
     let level = 1;
     let linesCleared = 0;
     let rotations = 0;
-	const HTMLBoard = document.getElementById("tetrisBoard");
-	const rows = 20;
-	const cols = 10;
 
     let grid = [];
 
@@ -65,21 +58,14 @@ window.onload = () => {
     const random = (min, max) => {
         return Math.floor(Math.random() * (max-min+1))+min;
     }
-	const HTMLHold = document.getElementById("holdPieceBlock");
-	const holdRows = 5;
-	const holdCols = 5;
 
     let colors = ["#00f0f0", "#0000f0", "#f0a000", "#f0f000", "#00f000", "#a000f0", "#f00000"];
-    const HTMLgameInfo = document.getElementById("gameInfo");
-    const HTMLshowGhost = document.getElementById("showGhostCheckbox");
-    const HTMLresetButton = document.getElementById("resetButton");
 
     let pieces = [  //I piece
                     [[0, 0, 0, 0],
                     [1, 1, 1, 1],
                     [0, 0, 0, 0],
                     [0, 0, 0, 0]],
-    let showGhost = HTMLshowGhost.checked;
 
                     //J Piece
                     [[2, 0, 0],
@@ -104,106 +90,29 @@ window.onload = () => {
                     [[0, 6, 0],
                     [6, 6, 6],
                     [0, 0, 0]],
-    HTMLshowGhost.addEventListener("change", () => {
-        showGhost = HTMLshowGhost.checked;
-    });
 
                     //Z Piece
                     [[7, 7, 0],
                     [0, 7, 7],
                     [0, 0, 0]]
     ];
-	const tetrominoes = [
-		//I Piece
-		[
-			[0, 0, 0, 0],
-			[1, 1, 1, 1],
-			[0, 0, 0, 0],
-			[0, 0, 0, 0]
-		],
-
-		//J Piece
-		[
-			[2, 0, 0],
-			[2, 2, 2],
-			[0, 0, 0]
-		],
-
-		//L Piece
-		[
-			[0, 0, 3],
-			[3, 3, 3],
-			[0, 0, 0]
-		],
-
-		//O Piece
-		[
-			[4, 4],
-			[4, 4]
-		],
-
-		//S Piece
-		[
-			[0, 5, 5],
-			[5, 5, 0],
-			[0, 0, 0]
-		],
-
-		//Z Piece
-
-		[
-			[6, 6, 0],
-			[0, 6, 6],
-			[0, 0, 0]
-		],
-
-		//T Piece
-		[
-			[0, 7, 0],
-			[7, 7, 7],
-			[0, 0, 0]
-		],
-	];
-
-    const colors = ["cyan", "blue", "orange", "yellow", "green", "red", "magenta"];
-
-	let level = 1;
-	let score = 0;
-	let lines = 0;
-
-    const speeds = [60, 53, 48, 43, 38, 33, 28, 23, 18, 13, 8, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-
-	let currentPos = random(0, tetrominoes.length-1);
-	//currentPos = 0;
-	let currentTetromino = JSON.parse(JSON.stringify(tetrominoes[currentPos]));
-	let currentRow = -1;
-	//let currentRow = 0;
-	let currentCol = cols/2-Math.ceil(currentTetromino[0].length/2);
 
     let bag7a = [];
     let bag7b = [];
 
     while (bag7a.length < pieces.length) {
         let pieceNum = random(0, pieces.length-1);
-    while (bag7a.length < tetrominoes.length) {
-        let pieceNum = random(0, tetrominoes.length-1);
 
         if (bag7a.indexOf(pieces[pieceNum]) == -1) {
             bag7a.push(pieces[pieceNum]);
-        if (bag7a.indexOf(pieceNum) == -1) {
-            bag7a.push(pieceNum);
         }
     }
 
     while (bag7b.length < pieces.length) {
         let pieceNum = random(0, pieces.length-1);
-    while (bag7b.length < tetrominoes.length) {
-        let pieceNum = random(0, tetrominoes.length-1);
 
         if (bag7b.indexOf(pieces[pieceNum]) == -1) {
             bag7b.push(pieces[pieceNum]);
-        if (bag7b.indexOf(pieceNum) == -1) {
-            bag7b.push(pieceNum);
         }
     }
 
@@ -233,8 +142,6 @@ window.onload = () => {
         }
 
         linesCleared++;
-    for (let i = 0; i < bag7a.length; i++) {
-        currentPiece.push(JSON.parse(JSON.stringify(tetrominoes[bag7a[i]])));
     }
 
     const findState = () => {
@@ -242,27 +149,17 @@ window.onload = () => {
             grid.forEach(row => row.fill(0));
         }
     }
-	let canHold = true;
 
     const clearLine = () => {
         let totalLines = 0;
-	let holdPiece = [];
-    let holdPos = 0;
 
         grid.forEach((row, j) => {
             if (row.every(block => block != 0)) {
                 row.forEach((block, i, arr) => {
                     arr[i] = 0;
                 });
-	let startRow = 0;
-	let endRow = 0;
-	let startCol = 0;
-	let endCol = 0;
 
                 totalLines++;
-	//let zPressed
-	let xPressed = false;
-	//let shiftPressed
 
                 dropBoard(j-1);
             }
@@ -277,15 +174,11 @@ window.onload = () => {
         } else if (totalLines == 4) {
             score += 1000*level;
         }
-	let rotations = 0;
 
         level = Math.floor(linesCleared/10)+1;
-    const look = (str, substr) => {
-        return isNaN(str) && str.indexOf(substr) > -1;
     }
 
     const isValid = direction => {
-	const isValid = direction => {
         if (direction == "left") {
             let startingPosition = 0;
 
@@ -302,8 +195,6 @@ window.onload = () => {
                 for (let j = 0; j < currentPiece.length; j++) {
                     firstCol.push(currentPiece[j][startingPosition]);
                 }
-            for (let i = 0; i < currentTetromino.length; i++) {
-                firstCol.push(currentTetromino[i][startCol]);
             }
 
             return firstCol.every(block => block == 0 || (startingPosition+currentCol >= 0)) &&
@@ -315,9 +206,6 @@ window.onload = () => {
                     }
 
                     return block == 0 || (j+currentCol-1 >= 0 && grid[i+currentRow][j+currentCol-1] == 0);
-            return firstCol.every(block => block == 0 || (startCol+currentCol >= 0)) &&
-                  currentTetromino.every((row, i, arr) => row.every((block, j) => {
-                    return block == 0 || j > startCol || (j+currentCol-1 >= 0 && (board[i+currentRow][j+currentCol-1] == 0 || look(board[i+currentRow][j+currentCol-1], "#")));
                 }));
 
         } else if (direction == "right") {
@@ -327,8 +215,6 @@ window.onload = () => {
 
             for (let j = 0; j < currentPiece.length; j++) {
                 lastCol.push(currentPiece[j][endingPosition]);
-            for (let j = 0; j < currentTetromino.length; j++) {
-                lastCol.push(currentTetromino[j][lastCol]);
             }
 
             while (lastCol.every(block => block == 0)) {
@@ -343,28 +229,20 @@ window.onload = () => {
             return lastCol.every(block => block == 0 || (endingPosition+currentCol < grid[0].length)) &&
                   currentPiece.every((row, i, arr) => row.every((block, j) => {
                     return block == 0 || (j+currentCol+1 < grid[0].length && grid[i+currentRow][j+currentCol+1] == 0);
-            return lastCol.every(block => block == 0 || (endCol+currentCol < board[0].length)) &&
-                  currentTetromino.every((row, i, arr) => row.every((block, j) => {
-                    return block == 0 || j < endCol || (j+currentCol+1 < board[0].length && (board[i+currentRow][j+currentCol+1] == 0 || look(board[i+currentRow][j+currentCol+1], "#")));
                 }));
         }
 
         let endingPosition = currentPiece.length-1;
-        let endingPosition = currentTetromino.length-1;
 
         let lastRow = currentPiece[endingPosition];
-        let lastRow = currentTetromino[endingPosition];
 
         while (lastRow.every(block => block == 0)) {
             endingPosition--;
             lastRow = currentPiece[endingPosition];
-            lastRow = currentTetromino[endingPosition];
         }
 
         return lastRow.every(block => block == 0 || currentRow+endingPosition < grid.length) &&
                currentPiece.every((row, i) => row.every((block, j) => block == 0 || (i+currentRow+1 < grid.length && grid[i+currentRow+1][j+currentCol] == 0)));
-        return lastRow.every(block => block == 0 || currentRow+endingPosition < board.length) && 
-        	currentTetromino.every((row, i) => row.every((block, j) => block == 0 || (i+currentRow+1 < board.length && (board[i+currentRow+1][j+currentCol] == 0 || look(board[i+currentRow+1][j+currentCol], "#")))));
     }
 
     const translatePiece = (col, row) => {
@@ -375,16 +253,12 @@ window.onload = () => {
 
     const rotatePiece = direction => {
         let copyPiece = [];
-    	let copyPiece = [];
 
         for (let i = 0; i < currentPiece.length; i++) {
-    	for (let i = 0; i < currentTetromino.length; i++) {
             copyPiece.push([]);
 
             for (let j = 0; j < currentPiece[i].length; j++) {
                 copyPiece[i].push(currentPiece[i][j]);
-            for (let j = 0; j < currentTetromino[i].length; j++) {
-                copyPiece[i].push(currentTetromino[i][j]);
             }
         }
 
@@ -392,13 +266,8 @@ window.onload = () => {
             for (let j = 0; j < currentPiece[i].length; j++) {
                 if (direction == "clockwise") {
                     currentPiece[i][j] = copyPiece[currentPiece.length-j-1][i];
-        for (let i = 0; i < currentTetromino.length; i++) {
-            for (let j = 0; j < currentTetromino[i].length; j++) {
-                if (direction == "c") {
-                    currentTetromino[i][j] = copyPiece[currentTetromino.length-j-1][i];
                 } else {
                     currentPiece[i][j] = copyPiece[j][currentPiece[0].length-i-1];
-                    currentTetromino[i][j] = copyPiece[j][currentTetromino[0].length-i-1];
                 }
             }
         }
@@ -406,11 +275,13 @@ window.onload = () => {
         let sign = 1;
 
         if (direction == "clockwise") {
-        if (direction == "c") {
             rotations++;
         } else {
             rotations--;
-@@ -285,48 +211,47 @@ window.onload = () => {
+            sign = -1;
+        }
+
+        if (rotations < 0) {
             rotations = 3;
         }
 
@@ -426,7 +297,6 @@ window.onload = () => {
         while (currentPiece[endRow].every(block => block == 0)) {
             endRow--;
         }
-        findBounds();
 
         while (currentPiece.every((row, i) => currentPiece[i][startCol] == 0)) {
             startCol++;
@@ -435,41 +305,18 @@ window.onload = () => {
         while (currentPiece.every((row, i) => currentPiece[i][endCol] == 0)) {
             endCol--;
         }
-        board.forEach((row, i, arr) => {
-            arr[i].forEach((block, j) => {
-                if (board[i][j] >= 1 && board[i][j] <= 7) {
-                    board[i][j] = 0;
-                }
-            });
-        });
 
         let wallKickCondition = currentRow+endRow > grid.length-1 || currentCol+startCol < 0 || currentCol+endCol > grid[0].length-1;
-        let wallKickCondition = currentRow+endRow > board.length-1 || currentCol+startCol < 0 || currentCol+endCol > board[0].length-1;
-
+        
         for (let i = 0; i < currentPiece.length; i++) {
             for (let j = 0; j < currentPiece[i].length; j++) {
                 if (currentPiece[i][j] != 0) {
                     if (!wallKickCondition && grid[i+currentRow][j+currentCol] != 0) {
-        /*for (let i = 0; i < currentTetromino.length; i++) {
-            for (let j = 0; j < currentTetromino[i].length; j++) {
-                if (currentTetromino[i][j] != 0) {
-                    if (!wallKickCondition && board[i+currentRow][j+currentCol] != 0) {
                         wallKickCondition = true;
                     }
                 }
             }
         }
-        }*/
-
-        currentTetromino.forEach((row, i, arr) => {
-        	arr[i].forEach((block, j) => {
-        		if (block != 0) {
-        			if (!wallKickCondition && board[i+currentRow][j+currentCol] != 0) {
-                        wallKickCondition = true;
-                    }
-        		}
-        	});
-        });
 
         let wallKickCase = 1;
 
@@ -478,42 +325,99 @@ window.onload = () => {
 
         while (wallKickCondition && wallKickCase < 5) {
             if (currentPiece.length < 4) {
-            if (currentTetromino.length < 4) {
                 if (rotations%4 == 0) {
                     if (direction == "clockwise") {
-                    if (direction == "c") {
                         if (wallKickCase == 1) {
                             translateX = -1;
                         } else if (wallKickCase == 2) {
-@@ -364,7 +289,7 @@ window.onload = () => {
+                            translateX = -1;
+                            translateY = 1;
+                        } else if (wallKickCase == 3) {
+                            translateY = -2;
+                        } else {
+                            translateX = -1;
+                            translateY = -2;
+                        }
+                    } else {
+                        if (wallKickCase == 1) {
+                            translateX = 1;
+                        } else if (wallKickCase == 2) {
+                            translateX = 1;
+                            translateY = 1;
+                        } else if (wallKickCase == 3) {
+                            translateY = -2;
+                        } else {
+                            translateX = 1;
+                            translateY = -2;
+                        }
+                    }
+                } else if (rotations%4 == 1) {
+                    if (wallKickCase == 1) {
+                        translateX = -1;
+                    } else if (wallKickCase == 2) {
+                        translateX = -1;
+                        translateY = -1;
+                    } else if (wallKickCase == 3) {
+                        translateY = 2;
+                    } else {
+                        translateX = -1;
                         translateY = 2;
                     }
                 } else if (rotations%4 == 2) {
                     if (direction == "clockwise") {
-                    if (direction == "c") {
                         if (wallKickCase == 1) {
                             translateX = 1;
                         } else if (wallKickCase == 2) {
-@@ -405,27 +330,27 @@ window.onload = () => {
+                            translateX = 1;
+                            translateY = 1;
+                        } else if (wallKickCase == 3) {
+                            translateY = -2;
+                        } else {
+                            translateX = 1;
+                            translateY = -2;
+                        }
+                    } else {
+                        if (wallKickCase == 1) {
+                            translateX = -1;
+                        } else if (wallKickCase == 2) {
+                            translateX = -1;
+                            translateY = 1;
+                        } else if (wallKickCase == 3) {
+                            translateY = -2;
+                        } else {
+                            translateX = -1;
+                            translateY = -2;
+                        }
+                    }
+                } else {
+                    if (wallKickCase == 1) {
+                        translateX = 1;
+                    } else if (wallKickCase == 2) {
+                        translateX = 1;
+                        translateY = -1;
+                    } else if (wallKickCase == 3) {
+                        translateY = 2;
+                    } else {
+                        translateX = 1;
+                        translateY = 2;
+                    }
+                }
             } else {
                 if (rotations%4 == 0) {
                     if (wallKickCase == 1) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 1;
                         } else {
                             translateX = 2;
                         }
                     } else if (wallKickCase == 2) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -2;
                         } else {
                             translateX = -1;
                         }
                     } else if (wallKickCase == 3) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 1;
                             translateY = 2;
                         } else {
@@ -522,30 +426,28 @@ window.onload = () => {
                         }
                     } else {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -2;
                             translateY = -1;
                         } else {
-@@ -435,27 +360,27 @@ window.onload = () => {
+                            translateX = -1;
+                            translateY = 2;
+                        }
                     }
                 } else if (rotations%4 == 1) {
                     if (wallKickCase == 1) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -2;
                         } else {
                             translateX = 1;
                         }
                     } else if (wallKickCase == 2) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 1;
                         } else {
                             translateX = -2;
                         }
                     } else if (wallKickCase == 3) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -2;
                             translateY = 1;
                         } else {
@@ -554,30 +456,28 @@ window.onload = () => {
                         }
                     } else {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 1;
                             translateY = -2;
                         } else {
-@@ -465,27 +390,27 @@ window.onload = () => {
+                            translateX = -2;
+                            translateY = -1;
+                        }
                     }
                 } else if (rotations%4 == 2) {
                     if (wallKickCase == 1) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -1;
                         } else {
                             translateX = -2;
                         }
                     } else if (wallKickCase == 2) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 2;
                         } else {
                             translateX = 1;
                         }
                     } else if (wallKickCase == 3) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -1;
                             translateY = -2;
                         } else {
@@ -586,30 +486,28 @@ window.onload = () => {
                         }
                     } else {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 2;
                             translateY = 1;
                         } else {
-@@ -495,27 +420,27 @@ window.onload = () => {
+                            translateX = 1;
+                            translateY = -2;
+                        }
                     }
                 } else {
                     if (wallKickCase == 1) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 2;
                         } else {
                             translateX = -1;
                         }
                     } else if (wallKickCase == 2) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -1;
                         } else {
                             translateX = 2;
                         }
                     } else if (wallKickCase == 3) {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = 2;
                             translateY = -1;
                         } else {
@@ -618,29 +516,30 @@ window.onload = () => {
                         }
                     } else {
                         if (direction == "clockwise") {
-                        if (direction == "c") {
                             translateX = -1;
                             translateY = 2;
                         } else {
-@@ -528,12 +453,12 @@ window.onload = () => {
+                            translateX = 2;
+                            translateY = 1;
+                        }
+                    }
+                }
+            }
 
             translatePiece(translateX, translateY);
 
             wallKickCondition = currentRow+endRow > grid.length-1 || currentCol+startCol < 0 || currentCol+endCol > grid[0].length-1;
-            wallKickCondition = currentRow+endRow > board.length-1 || currentCol+startCol < 0 || currentCol+endCol > board[0].length-1;
-
+        
             for (let i = 0; i < currentPiece.length; i++) {
                 for (let j = 0; j < currentPiece[i].length; j++) {
                     if (currentPiece[i][j] != 0) {
                         if (!wallKickCondition && grid[i+currentRow][j+currentCol] != 0) {
-            for (let i = 0; i < currentTetromino.length; i++) {
-                for (let j = 0; j < currentTetromino[i].length; j++) {
-                    if (currentTetromino[i][j] != 0) {
-                        if (!wallKickCondition && i + currentRow >= 0 && board[i+currentRow][j+currentCol] != 0) {
                             wallKickCondition = true;
                         }
                     }
-@@ -543,842 +468,525 @@ window.onload = () => {
+                }
+            }
+
             if (wallKickCondition) {
                 wallKickCase++;
                 translatePiece(-translateX, -translateY);
@@ -651,7 +550,6 @@ window.onload = () => {
 
         if (wallKickCase > 4) {
             currentPiece = copyPiece;
-        	currentTetromino = copyPiece;
             rotations -= sign;
         }
     }
@@ -688,72 +586,46 @@ window.onload = () => {
             currentRow = Math.floor(yPos/blockSize);
 
             currentCol = Math.round((cols-currentPiece.length)/2);
-        findBounds();
     }
 
     const findGhost = drop => {
         let startingPosition = 0;
-	const findBounds = () => {
-		let foundStartRow = false;
-		let foundStartCol = false;
 
         while (currentPiece[startingPosition].every(block => block == 0)) {
             startingPosition++;
         }
-		currentTetromino.forEach((row, i, arr) => {
-			if (row.some((num) => num != 0)) {
-				if (!foundStartRow) {
-					startRow = i;
 
         let endingPosition = currentPiece.length-1;
-					foundStartRow = true;
-				}
 
         let lastRow = currentPiece[endingPosition];
-				endRow = i;
-			}
-		});
 
         while (lastRow.every(block => block == 0)) {
             endingPosition--;
             lastRow = currentPiece[endingPosition];
         }
-		currentTetromino.forEach((row, i, arr) => {
-			for (let j = 0; j < arr.length; j++) {
-				if (currentTetromino[j][i] != 0) {
-					if (!foundStartCol) {
-						startCol = i;
 
         let lastPosition = currentRow;
-						foundStartCol = true;
-					}
 
         let collision = false;
-					endCol = i;
-				}
-			}
-		});
-	}
 
         while (!collision) {
             let validPieces = 0;
-	findBounds();
 
             for (let i = lastPosition; i < lastPosition+currentPiece.length; i++) {
                 if (currentPiece[i-lastPosition].every(block => block == 0)) {
                     continue;
                 }
-	const createBoard = (rows, cols) => {
-		const board = [];
 
                 for (let j = currentCol; j < currentCol+currentPiece[0].length; j++) {
-                    if (i < grid.length && currentPiece[i-lastPosition][j-currentCol] != 0 && grid[i][j] == 0) {
-                        validPieces++;
+                    try {
+                        if (i < grid.length && currentPiece[i-lastPosition][j-currentCol] != 0 && grid[i][j] == 0) {
+                            validPieces++;
+                        }
+                    } catch(error) {
+                        state = "Game Over";
                     }
                 }
             }
-		for (let i = 0; i < rows; i++) {
-			board.push([]);
 
             if (validPieces == 4) {
                 lastPosition++;
@@ -761,18 +633,10 @@ window.onload = () => {
                 collision = true;
             }
         }
-			for (let j = 0; j < cols; j++) {
-				board[i].push(0);
-			}
-		}
 
         lastPosition += startingPosition-1;
-		return board;
-	};
 
         //console.log(lastPosition, startingPosition);
-	const board = createBoard(rows, cols);
-	const holdBoard = createBoard(holdRows, holdCols);
 
         let ghostPiece = [];
 
@@ -785,11 +649,6 @@ window.onload = () => {
                     graphics.globalAlpha = 1;
                 }
             }
-    const dropBoard = row => {
-        for (let i = row; i >= 1; i--) {
-            let tempRow = board[i].slice();
-            board[i].fill(0);
-            board[i+1] = tempRow;
         }
 
         if (drop) {
@@ -818,28 +677,19 @@ window.onload = () => {
 
             canHold = true;
         }
-        lines++;
     }
 
     const updatePiece = (increment) => {
         findGhost(false);
-    const clearLine = () => {
-        let totalLines = 0;
 
         if (canIncreaseSpeed) {
             blockSpeedIncrement = level;
             blockSpeedScale = 1+blockSpeedIncrement;
         }
-        board.forEach((row, i, arr) => {
-            if (arr[i].every(block => look(block, "P"))) {
-                arr[i].forEach((block, j) => {
-                    arr[i][j] = 0;
-                });
 
         if (isValid("vertical")) {
             yPos += increment;
             currentRow = Math.floor(yPos/blockSize);
-                totalLines++;
 
             if (downPressed && increment > blockSpeed) {
                 score += level;
@@ -856,9 +706,7 @@ window.onload = () => {
                         }
                     }
                 }
-                dropBoard(i-1);
             }
-        });
 
             if (timeToLock > 0) {
                 timeToLock--;
@@ -868,7 +716,7 @@ window.onload = () => {
                 }
             } else {
                 timeToLock = Math.ceil(25/(level/8)); 
-
+                
                 if (state == "Master") {
                     timeToLock = Math.ceil(25/((level-50)/8)); 
                 }
@@ -887,36 +735,21 @@ window.onload = () => {
 
                 canHold = true;
             }
-        if (totalLines == 1) {
-            score += 100*level;
-        } else if (totalLines == 2) {
-            score += 300*level;
-        } else if (totalLines == 3) {
-            score += 600*level;
-        } else if (totalLines == 4) {
-            score += 1000*level;
         }
-
-        level = Math.floor(lines/10)+1;
     }
 
     const drawPiece = () => {
         let happened = false;
-	const nextPiece = () => {
-        let thePiece = bag7a.pop();
 
         for (let i = 0; i < currentPiece.length; i++) {
             if (happened) {
                 break;
             }
-
+                
             for (let j = 0; j < currentPiece[i].length; j++) {
                 if (happened) {
                     break;
                 }
-        if (bag7a.length == 0) {
-            bag7a = bag7b;
-            bag7b = [];
 
                 if (currentPiece[i][j] != 0) {
                     graphics.fillStyle = colors[currentPiece[i][j]-1];
@@ -925,16 +758,12 @@ window.onload = () => {
                 }
             }
         }
-            while (bag7b.length < tetrominoes.length) {
-                let pieceNum = random(0, tetrominoes.length-1);
 
         for (let i = 0; i < currentPiece.length; i++) {
             for (let j = 0; j < currentPiece[i].length; j++) {
                 if (currentPiece[i][j] != 0) {
                     graphics.fillRect((j+currentCol)*blockSize, (i+currentRow)*blockSize, blockSize, blockSize);
                     //graphics.fillRect((j+currentCol)*blockSize, Math.floor(yPos+(i*blockSize)), blockSize, blockSize);
-                if (bag7b.indexOf(pieceNum) == -1) {
-                    bag7b.push(pieceNum);
                 }
             }
         }
@@ -956,8 +785,6 @@ window.onload = () => {
             graphics.lineTo(i*blockSize, height);
             graphics.stroke();
         }
-        for (let i = 0; i < bag7a[0].length; i++) {
-            currentPiece.push([]);
 
         if (!invisible) {
             for (let i = 0; i < rows; i++) {
@@ -967,20 +794,12 @@ window.onload = () => {
                         graphics.fillRect(j*blockSize, i*blockSize, blockSize, blockSize);
                     }
                 }
-            for (let j = 0; j < bag7a[0][i].length; j++) {
-                currentPiece[i].push(bag7a[0][i][j]);
             }
         }
     }
 
     let showTimer = false;
     let time = 0;
-		currentTetromino = JSON.parse(JSON.stringify(tetrominoes[thePiece]));
-        currentPos = thePiece;
-		currentRow = 0;
-		currentCol = cols/2-Math.ceil(currentTetromino[0].length/2);
-
-		findBounds();
 
     const reset = () => {
         blockSpeed = .25;
@@ -989,13 +808,9 @@ window.onload = () => {
         yPos = 0;
         timeToLock = 100;
         canIncreaseSpeed = true;
-		canHold = true;
-	};
 
         time = 0
         showTimer = false;
-    const findGhost = drop => {
-        let lastPosition = currentRow;
 
         downPressed = false;
         score = 0;
@@ -1007,16 +822,9 @@ window.onload = () => {
         currentRow = 10;
         currentCol = Math.round((cols-currentPiece.length)/2);
         invisible = false;
-        let collision = false;
 
         grid.forEach((row, i, arr) => {
             arr[i].fill(0);
-        board.forEach((row, i, arr) => {
-            arr[i].forEach((block, j) => {
-                if (block >= 1 && block <= 7) {
-                    board[i][j] = 0;
-                }
-            });
         });
     }
 
@@ -1051,29 +859,15 @@ window.onload = () => {
                             while (bag7a[i][endingPosition].every(block => block == 0)) {
                                 endingPosition--;
                             }
-        while (!collision) {
-            let validPieces = 0;
 
                             let yAlign = 170-startingPosition*blockSize;
-            for (let i = lastPosition; i < lastPosition+currentTetromino.length; i++) {
-                if (currentTetromino[i-lastPosition].every(block => block == 0)) {
-                    continue;
-                }
 
                             ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7a[i][0].length/2), Math.floor((j+shiftY)*blockSize+yAlign+blockSize*i), blockSize, blockSize);
                         }
-                for (let j = currentCol; j < currentCol+currentTetromino[0].length; j++) {
-                    if (i < board.length && currentTetromino[i-lastPosition][j-currentCol] != 0 && (board[i][j] == 0 || look(board[i][j], "#"))) {
-                        validPieces++;
                     }
                 }
-            }
 
                 shiftY += endingPosition-startingPosition+1;
-            if (validPieces == 4) {
-                lastPosition++;
-            } else {
-                collision = true;
             }
         }
 
@@ -1096,7 +890,6 @@ window.onload = () => {
                             }
 
                             endingPosition = bag7b[i].length-1;
-        lastPosition += startRow-1;
 
                             while (bag7b[i][endingPosition].every(block => block == 0)) {
                                 endingPosition--;
@@ -1106,17 +899,8 @@ window.onload = () => {
 
                             ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7b[i][0].length/2), Math.floor((j+shiftY)*blockSize+yAlign+blockSize*(i+bag7a.length)), blockSize, blockSize);
                         }
-        if (showGhost) {
-            /*for (let i = 0; i < currentTetromino.length; i++) {
-                for (let j = 0; j < currentTetromino[i].length; j++) {
-                    if (currentTetromino[i][j] != 0) {
-                        graphics.globalAlpha = 0.5;
-                        graphics.fillStyle = colors[currentTetromino[i][j]-1];
-                        graphics.fillRect((j+currentCol)*blockSize, (lastPosition+i-startRow)*blockSize, blockSize, blockSize);
-                        graphics.globalAlpha = 1;
                     }
                 }
-            }*/
 
                 shiftY += endingPosition-startingPosition+1;
             }
@@ -1137,25 +921,13 @@ window.onload = () => {
 
                     while (pieceHolding[startingPosition].every(block => block == 0)) {
                         startingPosition++;
-            currentTetromino.forEach((row, i, arr) => {
-                arr[i].forEach((block, j) => {
-                    if (block != 0 && lastPosition+i-startRow >= 0) {
-                        board[lastPosition+i-startRow][currentCol+j] = "#" + currentTetromino[i][j];
                     }
-                });
-            });
 
                     let endingPosition = pieceHolding.length-1;
 
                     while (pieceHolding[endingPosition].every(block => block == 0)) {
                         endingPosition--;
-            currentTetromino.forEach((row, i, arr) => {
-                arr[i].forEach((block, j) => {
-                    if (block >= 1 && block <= 7) {
-                        board[i+currentRow][j+currentCol] = block;
                     }
-                });
-            });
 
                     let yAlign = hud.height-200-startingPosition*blockSize;
 
@@ -1174,7 +946,6 @@ window.onload = () => {
             let milliseconds = `0${((time/60)%1).toString().substring(2, 4)}`.slice(-2);
 
             ctx.fillText(`Time: ${minutes}:${seconds}.${milliseconds}`, hud.width/2+100, 50);
-            drawBoard();
         }
     }
 
@@ -1197,13 +968,6 @@ window.onload = () => {
             } else {
                 time = 0;
             }
-        if (drop) {
-            currentTetromino.forEach((row, i, arr) => {
-                arr[i].forEach((block, j) => {
-                    if (block != 0) {
-                        try {
-                            board[lastPosition+i-startRow][currentCol+j] = "P" + currentTetromino[i][j];
-                        } catch (err) {
 
             if (linesCleared >= 40) {
                 transition = true;
@@ -1216,30 +980,23 @@ window.onload = () => {
             if (lastState != state) {
                 linesCleared = 500;
             }
-                        }
-                    }
-                });
-            });
 
             lastState = state;
         } else if (state == "Big") {
             if (lastState != state) {
                 blockSize *= 4;
             }
-            nextPiece();
 
             lastState = state;
         }
-            score += level*30;
 
         if (!showTimer) {
             time = 0;
-            canHold = true;
         }
     }
 
     let titleScreenImage = new Image();
-    titleScreenImage.src = "Images/titleScreen.png";
+    titleScreenImage.src = "Images/TitleScreen.png";
     let title = new Image();
     title.src = "Images/tetris.svg";
 
@@ -1320,8 +1077,6 @@ window.onload = () => {
                 if (increment != 0) {
                     updatePiece(increment);
                 }
-	const updatePiece = () => {
-		let timeToBePlaced = currentRow+endRow+1 >= rows;
 
                 drawPiece();
             }
@@ -1341,9 +1096,6 @@ window.onload = () => {
                     graphics.globalAlpha = 1;
                 }
             }
-		currentTetromino[endRow].forEach((block, i, arr) => {
-			timeToBePlaced ||= block != 0 && currentRow+endRow+1 < rows && board[currentRow+endRow+1][i+currentCol] != 0 && !look(board[currentRow+endRow+1][i+currentCol], "#");
-		});
 
             graphics.fillStyle = "lime";
 
@@ -1359,11 +1111,6 @@ window.onload = () => {
                 graphics.drawImage(gameOverImage, 0, 0, width, height);
 
                 graphics.fillText("GAME OVER!", width/2, 200);
-        currentTetromino.forEach((row, i, arr) => {
-            if (i < currentTetromino.length-1) {
-                arr[i].forEach((block, j) => {
-                    timeToBePlaced ||= block != 0 && currentRow+endRow+1 < rows && currentRow+startRow >= 0 && look(board[currentRow+i+1][currentCol+j], "P");
-                });
             }
         }
     }
@@ -1374,88 +1121,26 @@ window.onload = () => {
     let gameSelect = new Audio("Sounds/GameSelect.mp3");
 
     let gameMusic = [];
-        });
 
     let gameOverMusic = new Audio("Sounds/GameOver.mp3");
     let gameCompletedMusic = new Audio("Sounds/GameCompleted.mp3");
-		if (!timeToBePlaced) {
-			currentRow++;
-		} else {
-			currentTetromino.forEach((row, i, arr) => {
-				arr[i].forEach((block, j) => {
-					if (currentRow + i < rows && currentRow + i >= 0&& arr[i][j] >= 1 && arr[i][j] <= 7) {
-						board[currentRow+i][currentCol+j] = "P" + arr[i][j];
-					}
-				});
-			});
-
-			nextPiece();
-		}
-	}
-
-	const drawBoard = () => {
-        HTMLBoard.innerHTML = "";
-
-		for (let i = 0; i < cols; i++) {
-            HTMLBoard.innerHTML += " _";
-		}
-
-		for (let i = 0; i < rows; i++) {
-            HTMLBoard.innerHTML += "\n|";
-
-			for (let j = 0; j < cols; j++) {
-				if (j < cols-1) {
-					if (board[i][j] == 0) {
-                        HTMLBoard.innerHTML += "- ";
-					} else if (board[i][j] <= tetrominoes.length) {
-                        HTMLBoard.innerHTML += "@ ";
-					} else if (look(board[i][j], "P")) {
-                        let text = colors[board[i][j][1]-1];
-                        HTMLBoard.innerHTML += `<strong class="${text}">M </strong>`;
-					} else if (look(board[i][j], "#")) {
-                        let text = colors[board[i][j][1]-1];
-                        HTMLBoard.innerHTML += `<bold class="${text}"># </bold>`;
-                    }
-				} else {
-					if (board[i][j] == 0) {
-                        HTMLBoard.innerHTML += "-";
-					} else if (board[i][j] <= tetrominoes.length) {
-                        HTMLBoard.innerHTML += "@";
-					} else if (look(board[i][j], "P")) {
-                        let text = colors[board[i][j][1]-1];
-                        HTMLBoard.innerHTML += `<strong class="${text}">M</strong>`;
-					} else if (look(board[i][j], "#")) {
-                        let text = colors[board[i][j][1]-1];
-                        HTMLBoard.innerHTML += `<bold class="${text}">#</bold>`;
-                    }
-				}
-			}
 
     for (let i = 1; i < 12; i++) {
         gameMusic.push(new Audio());
         gameMusic[i-1].src = "Sounds/GameMusic"+i+".mp3";
     }
-            HTMLBoard.innerHTML += "|";
-		}
 
     music.ontimeupdate = function() {
         /*switch(this.src) {
-        HTMLBoard.innerHTML += "\n";
 
         case "Sounds/GameSelect.mp3":
             if (this.currentTime > 56.115761) {
                 this.currentTime = 0;
             }
-		for (let i = 0; i < cols; i++) {
-            HTMLBoard.innerHTML += " \u203E";
-		}
 
             break;
-        HTMLBoard.innerHTML = HTMLBoard.innerHTML.replace(/\|/g, `<strong>|</strong>`).replace(/@/g, `<strong class="${colors[currentPos]}">@</strong>`);
 
         }*/
-        console.clear();
-        console.log(JSON.parse(JSON.stringify(HTMLBoard.textContent)));
     }
 
     const resetMusic = () => {
@@ -1476,94 +1161,6 @@ window.onload = () => {
         if (music != gameCompletedMusic) {
             gameCompletedMusic.currentTime = 0;
         }
-	const updateBoard = () => {
-		board.forEach((row, i, arr) => {
-			arr[i].forEach((block, j) => {
-				if (!look(arr[i][j], "P")) {
-					arr[i][j] = 0;
-				}
-			});
-		});
-
-		currentTetromino.forEach((row, i, arr) => {
-			arr[i].forEach((block, j) => {
-				if (currentRow + i < rows) {
-					if (arr[i][j] != 0) {
-						board[currentRow+i][currentCol+j] = arr[i][j];
-					}
-				}
-			});
-		});
-
-        drawBoard();
-	};
-
-	const drawHoldPiece = () => {
-		HTMLHold.textContent = "\nHold Piece\n";
-
-		for (let i = 0; i < holdCols; i++) {
-			HTMLHold.textContent += " _";
-		}
-
-		for (let i = 0; i < holdRows; i++) {
-			HTMLHold.textContent += "\n|";
-
-			for (let j = 0; j < holdCols; j++) {
-				if (j < holdCols-1) {
-					if (holdBoard[i][j] == 0) {
-						HTMLHold.textContent += "- ";
-					} else if (holdBoard[i][j] <= tetrominoes.length) {
-						HTMLHold.textContent += "@ ";
-					}
-				} else {
-					if (holdBoard[i][j] == 0) {
-						HTMLHold.textContent += "-";
-					} else if (holdBoard[i][j] <= tetrominoes.length) {
-						HTMLHold.textContent += "@";
-					}
-				}
-			}
-
-			HTMLHold.textContent += "|";
-		}
-
-		HTMLHold.textContent += "\n";
-
-		for (let i = 0; i < holdCols; i++) {
-			HTMLHold.textContent += " \u203E";
-		}
-
-		HTMLHold.innerHTML = HTMLHold.textContent.replace(/@/g, `<strong class="${colors[holdPos]}">@</strong>`);
-	};
-
-	const updateHoldPiece = () => {
-		holdBoard.forEach((row, i, arr) => {
-			arr[i].forEach((block, j) => {
-				if (!look(arr[i][j], "P")) {
-					arr[i][j] = 0;
-				}
-			});
-		});
-
-		holdPiece.forEach((row, i, arr) => {
-			arr[i].forEach((block, j) => {
-				if (arr[i][j] != 0) {
-					holdBoard[i+1][j+1] = arr[i][j];
-				}
-			});
-		});
-
-		drawHoldPiece();
-	};
-
-	drawHoldPiece();
-
-    const drawGameInfo = () => {
-        HTMLgameInfo.textContent = "\n";
-
-        HTMLgameInfo.textContent += `Level: ${level}
-Score: ${score}
-Lines: ${lines}`;
     }
 
     const playAudio = () => {
@@ -1573,67 +1170,17 @@ Lines: ${lines}`;
                     music.currentTime = 0;
                 }
             break;
-	const draw = () => {
-		updatePiece();
-		updateBoard();
-        drawGameInfo();
-        findGhost();
-	}
-
-	const update = () => {
-		let frame = requestAnimationFrame(update);
-
-		if ((level-1 < speeds.length && frame%speeds[level-1]-1 == 0) || level-1 >= speeds.length) {
-			draw();
-		}
-	};
-
-	document.addEventListener("keydown", function(key) {
-		if (key.keyCode == 37 && isValid("left")) {
-			currentCol--;
-		} else if (key.keyCode == 39 && isValid("right")) {
-			currentCol++;
-		} else if (key.keyCode == 38) {
-			rotatePiece("c");
-		} else if (key.keyCode == 88) {
-			rotatePiece("cc");
-		} else if (key.keyCode == 40) {
-            draw();
-            score += level;
-        } else if (key.keyCode == 16) {
-        	if (canHold) {
-                let length = holdPiece.length;
-
-                let hold = JSON.parse(JSON.stringify(holdPiece));
-                holdPiece = JSON.parse(JSON.stringify(tetrominoes[currentPos]));
-
-                if (length == 0) {
-                    holdPos = currentPos;
-
-                    currentTetromino = holdPiece;
-
-                    currentRow = 0;
-                    currentCol = Math.round((cols-currentTetromino.length)/2);
-
-                    nextPiece();
-                } else {
-                    let temp = currentPos;
 
             case gameSelect:
                 if (music.currentTime > 56.115761) {
                     music.currentTime = 0;
                 }
-                    currentPos = holdPos;
-                    holdPos = temp;
 
             break;
-                	currentTetromino = hold;
 
             case gameOverMusic:
                 if (music.currentTime >= gameOverMusic.duration-0.01) {
                     music.currentTime = 0;
-                    currentRow = 0;
-                    currentCol = Math.round((cols-currentTetromino.length)/2);
                 }
             break;
 
@@ -1642,16 +1189,10 @@ Lines: ${lines}`;
                     music.currentTime = 28.39297;
                 }
             break;
-                updateHoldPiece();
-                findBounds();
 
             default:
                 null;
             break;
-                canHold = false;
-            }
-        } else if (key.keyCode == 90) {
-            findGhost(true);
         }
 
         if (state == "Title Screen") {
@@ -1662,10 +1203,6 @@ Lines: ${lines}`;
                     music.pause();
                     resetMusic();
                 }
-        clearLine();
-		updateBoard();
-        findGhost();
-	});
 
                 music.volume = 1;
                 music = gameSelect;
@@ -1681,21 +1218,10 @@ Lines: ${lines}`;
                     canStop = false;
                 }
             }
-    HTMLresetButton.onclick = () => {
-        board.forEach((row, i, arr) => {
-            arr[i].forEach((block, j) => {
-                arr[i][j] = 0;
-            });
-        });
 
             if (canStop) {
                 music.playbackRate = 1;
             }
-        holdBoard.forEach((row, i, arr) => {
-            arr[i].forEach((block, j) => {
-                arr[i][j] = 0;
-            });
-        });
 
             if (graphics.globalAlpha >= 1) {
                 if (music.src.indexOf("GameMusic") == -1 || music.currentTime == music.duration) {
@@ -1703,20 +1229,12 @@ Lines: ${lines}`;
                     gameMusic[randInt].currentTime = 0;
                     music = gameMusic[randInt];
                 }
-        drawHoldPiece();
 
                 let marathonIndex = level%gameMusic.length;
-        level = 1;
-        lines = 0;
-        score = 0;
 
                 if (marathonIndex == 0) {
                     marathonIndex = 1;
                 }
-        currentPos = random(0, tetrominoes.length-1);
-        currentTetromino = JSON.parse(JSON.stringify(tetrominoes[currentPos]));
-        currentRow = 0;
-        currentCol = cols/2-Math.ceil(currentTetromino[0].length/2);
 
                 if (state == "Marathon" && gameMusic.indexOf(music) != marathonIndex) {
                     if (music.volume > 0.003 && level != 1) {
@@ -1738,8 +1256,6 @@ Lines: ${lines}`;
                     music.pause();
                     resetMusic();
                 }
-        bag7a = [];
-        bag7b = [];
 
                 music.volume = 1;
                 music = gameCompletedMusic;
@@ -1752,15 +1268,11 @@ Lines: ${lines}`;
                     music.pause();
                     resetMusic();
                 }
-        while (bag7a.length < tetrominoes.length) {
-            let pieceNum = random(0, tetrominoes.length-1);
 
                 music.volume = 1;
                 music = gameOverMusic;
             } else if (music.volume > 0.02) {
                 music.volume -= 0.02;
-            if (bag7a.indexOf(pieceNum) == -1) {
-                bag7a.push(pieceNum);
             }
         }
 
@@ -1784,8 +1296,6 @@ Lines: ${lines}`;
         let mouseY = mouse.offsetY;
 
         let buttonHeight = height/(games.length*2);
-        while (bag7b.length < tetrominoes.length) {
-            let pieceNum = random(0, tetrominoes.length-1);
 
         if (state == "Game Select") {
             for (let i = 0; i < games.length; i++) {
@@ -1796,8 +1306,6 @@ Lines: ${lines}`;
                         reset();
                     }
                 }
-            if (bag7b.indexOf(pieceNum) == -1) {
-                bag7b.push(pieceNum);
             }
         }
     })
@@ -1819,9 +1327,17 @@ Lines: ${lines}`;
             } else if (key.keyCode == 39 && isValid("right")) {
                 currentCol++;
             } else if (key.keyCode == 38) {
-                rotatePiece("clockwise");
+                try {
+                    rotatePiece("clockwise");
+                } catch (error) {
+                    state = "Game Over"
+                }
             } else if (key.keyCode == 88) {
-                rotatePiece("counter-clockwise");
+                try {
+                    rotatePiece("counter-clockwise");
+                } catch(error) {
+                    state = "Game Over"
+                }
             } else if (key.keyCode == 16) {
                 if (canHold) {
                     canHold = false;
@@ -1846,12 +1362,8 @@ Lines: ${lines}`;
                     } else {
                         nextPiece();
                     }
-        currentPiece = [];
 
                     pieceHolding = [];
-        for (let i = 0; i < bag7a.length; i++) {
-            currentPiece.push(JSON.parse(JSON.stringify(tetrominoes[bag7a[i]])));
-        }
 
                     for (let i = 0; i < pieces[piece-1].length; i++) {
                         pieceHolding.push([]);
@@ -1863,9 +1375,6 @@ Lines: ${lines}`;
             } else if (key.keyCode == 90) {
                 findGhost(true);
             }
-        canHold = true;
-        holdPiece = [];
-        holdPos = 0;
 
             if ([90,  88, 16, 37, 38, 39, 40].includes(key.keyCode)) {
                 draw(moved);
@@ -1876,8 +1385,6 @@ Lines: ${lines}`;
             state = "Game Select";
         }
     });
-        draw();
-    }
 
     document.addEventListener("keyup", key => {
         if (games.includes(state) && graphics.globalAlpha >= 1) {
@@ -1887,5 +1394,3 @@ Lines: ${lines}`;
         }
     });
 }
-	update();
-})();
