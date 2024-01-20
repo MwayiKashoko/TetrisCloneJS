@@ -833,12 +833,12 @@ window.onload = () => {
         ctx.font = "30px Helvetica";
         ctx.textAlign = "center";
 
-        ctx.fillText(`Score: ${score}`, hud.width/4, 40);
-        ctx.fillText(`Level: ${level}`, hud.width/4, 80);
-        ctx.fillText(`Lines: ${linesCleared}`, hud.width/4, 120);
+        ctx.fillText(`Score: ${score}`, hud.width/2, 40);
+        ctx.fillText(`Level: ${level}`, hud.width/2, 80);
+        ctx.fillText(`Lines: ${linesCleared}`, hud.width/2, 120);
 
         ctx.fillStyle = "red";
-        ctx.fillText("Next", hud.width/4, 180);
+        ctx.fillText("Next", hud.width/2, 180);
 
         let shiftY = 0;
 
@@ -862,7 +862,7 @@ window.onload = () => {
 
                             let yAlign = 170-startingPosition*blockSize;
 
-                            ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7a[i][0].length/2), Math.floor((j+shiftY)*blockSize+yAlign+blockSize*i), blockSize, blockSize);
+                            ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7a[i][0].length/2)-50, Math.floor((j+shiftY)*blockSize+yAlign+blockSize*i), blockSize, blockSize);
                         }
                     }
                 }
@@ -897,7 +897,7 @@ window.onload = () => {
 
                             let yAlign = 170-startingPosition*blockSize;
 
-                            ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7b[i][0].length/2), Math.floor((j+shiftY)*blockSize+yAlign+blockSize*(i+bag7a.length)), blockSize, blockSize);
+                            ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7b[i][0].length/2)-50, Math.floor((j+shiftY)*blockSize+yAlign+blockSize*(i+bag7a.length)), blockSize, blockSize);
                         }
                     }
                 }
@@ -907,10 +907,10 @@ window.onload = () => {
         }
 
         ctx.fillStyle = "white";
-        ctx.fillText(`Hold`, hud.width/4, 580);
+        ctx.fillText(`Hold`, hud.width/2, 580);
 
         ctx.strokeStyle = "white";
-        ctx.strokeRect(hud.width/4-75, hud.height-200, 150, 150);
+        ctx.strokeRect(hud.width/4-25, hud.height-200, 150, 150);
 
         for (let i = 0; i < pieceHolding.length; i++) {
             for (let j = 0; j < pieceHolding[i].length; j++) {
@@ -933,7 +933,7 @@ window.onload = () => {
 
                     let newAlign = 150-blockSize*(endingPosition-startingPosition+1);
 
-                    ctx.fillRect(Math.floor(j*blockSize+width/2-blockSize*pieceHolding[0].length/2), Math.floor(i*blockSize+yAlign+newAlign/2), blockSize, blockSize);
+                    ctx.fillRect(Math.floor(j*blockSize+width/2-blockSize*pieceHolding[0].length/2)-50, Math.floor(i*blockSize+yAlign+newAlign/2), blockSize, blockSize);
                 }
             }
         }
@@ -948,7 +948,7 @@ window.onload = () => {
             ctx.fillText(`Time: ${minutes}:${seconds}.${milliseconds}`, hud.width/2+100, 50);
         }
     }
-
+    
     let invisible = false;
 
     const gameLogic = () => {
