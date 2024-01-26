@@ -11,6 +11,7 @@ window.onload = () => {
     const graphics = canvas.getContext("2d");
 
     const startButton = document.getElementById("startButton");
+    const muteButton = document.getElementById("muteButton");
 
     startButton.onclick = () => {
         if (state == "none") {
@@ -31,11 +32,16 @@ window.onload = () => {
     let timeToLock = 100;
     let canIncreaseSpeed = true;
 
-    canvas.width = width;
+    canvas.width = width+250;
     canvas.height = height;
 
-    const hud = document.getElementById("hud");
-    const ctx = hud.getContext("2d");
+    /*const hud = document.getElementById("hud");
+    const ctx = hud.getContext("2d");*/
+
+    const hudWidth = 200;
+    const hudOffset = width+50;
+    const trueOffset = 50;
+    const hudHeight = height;
 
     let downPressed = false;
     let score = 0;
@@ -829,18 +835,20 @@ window.onload = () => {
     }
 
     const updateHud = () => {
-        ctx.fillStyle = "white";
-        ctx.font = "30px Helvetica";
-        ctx.textAlign = "center";
+        graphics.fillStyle = "white";
+        graphics.font = "2ß0px Helvetica";
+        graphics.textAlign = "center";
 
-        ctx.fillText(`Score: ${score}`, hud.width/2, 40);
-        ctx.fillText(`Level: ${level}`, hud.width/2, 80);
-        ctx.fillText(`Lines: ${linesCleared}`, hud.width/2, 120);
+        graphics.fillText(`Score: ${score}`, hudOffset-(trueOffset/2)+hudWidth/2, 40);
+        graphics.fillText(`Level: ${level}`, hudOffset-(trueOffset/2)+hudWidth/2, 70);
+        graphics.fillText(`Lines: ${linesCleared}`, hudOffset-(trueOffset/2)+hudWidth/2, 100);
 
-        ctx.fillStyle = "red";
-        ctx.fillText("Next", hud.width/2, 180);
+        graphics.fillStyle = "red";
+        graphics.fillText("Next", hudOffset-(trueOffset/2) + hudWidth/2, 130);
 
         let shiftY = 0;
+
+        let newBlockSize = blockSize/1.5;
 
         for (let i = 1; i < bag7a.length; i++) {
             if (i < 5) {
@@ -850,7 +858,7 @@ window.onload = () => {
                 for (let j = 0; j < bag7a[i].length; j++) {
                     for (let k = 0; k < bag7a[i][j].length; k++) {
                         if (bag7a[i][j][k] != 0) {
-                            ctx.fillStyle = colors[bag7a[i][j][k]-1];
+                            graphics.fillStyle = colors[bag7a[i][j][k]-1];
 
                             while (bag7a[i][startingPosition].every(block => block == 0)) {
                                 startingPosition++;
@@ -860,9 +868,9 @@ window.onload = () => {
                                 endingPosition--;
                             }
 
-                            let yAlign = 170-startingPosition*blockSize;
+                            let yAlign = 130-startingPosition*newBlockSize;
 
-                            ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7a[i][0].length/2)-50, Math.floor((j+shiftY)*blockSize+yAlign+blockSize*i), blockSize, blockSize);
+                            graphics.fillRect(hudOffset+Math.floor(k*newBlockSize+width/2-newBlockSize*bag7a[i][0].length/2)-75, Math.floor((j+shiftY)*newBlockSize+yAlign+newBlockSize*i), newBlockSize, newBlockSize);
                         }
                     }
                 }
@@ -881,7 +889,7 @@ window.onload = () => {
                 for (let j = 0; j < bag7b[i].length; j++) {
                     for (let k = 0; k < bag7b[i][j].length; k++) {
                         if (bag7b[i][j][k] != 0) {
-                            ctx.fillStyle = colors[bag7b[i][j][k]-1];
+                            graphics.fillStyle = colors[bag7b[i][j][k]-1];
 
                             startingPosition = 0;
 
@@ -895,9 +903,9 @@ window.onload = () => {
                                 endingPosition--;
                             }
 
-                            let yAlign = 170-startingPosition*blockSize;
+                            let yAlign = 130-startingPosition*newBlockSize;
 
-                            ctx.fillRect(Math.floor(k*blockSize+width/2-blockSize*bag7b[i][0].length/2)-50, Math.floor((j+shiftY)*blockSize+yAlign+blockSize*(i+bag7a.length)), blockSize, blockSize);
+                            graphics.fillRect(hudOffset+Math.floor(k*newBlockSize+width/2-newBlockSize*bag7b[i][0].length/2)-75, Math.floor((j+shiftY)*newBlockSize+yAlign+newBlockSize*(i+bag7a.length)), newBlockSize, newBlockSize);
                         }
                     }
                 }
@@ -906,16 +914,16 @@ window.onload = () => {
             }
         }
 
-        ctx.fillStyle = "white";
-        ctx.fillText(`Hold`, hud.width/2, 580);
+        graphics.fillStyle = "white";
+        graphics.fillText(`Hold`, hudOffset-(trueOffset/2)+hudWidth/2, 580);
 
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(hud.width/4-25, hud.height-200, 150, 150);
+        graphics.strokeStyle = "white";
+        graphics.strokeRect(hudOffset, hudHeight-200, 150, 150);
 
         for (let i = 0; i < pieceHolding.length; i++) {
             for (let j = 0; j < pieceHolding[i].length; j++) {
                 if (pieceHolding[i][j] != 0) {
-                    ctx.fillStyle = colors[pieceHolding[i][j]-1];
+                    graphics.fillStyle = colors[pieceHolding[i][j]-1];
 
                     let startingPosition = 0;
 
@@ -929,26 +937,26 @@ window.onload = () => {
                         endingPosition--;
                     }
 
-                    let yAlign = hud.height-200-startingPosition*blockSize;
+                    let yAlign = hudHeight-200-startingPosition*blockSize;
 
                     let newAlign = 150-blockSize*(endingPosition-startingPosition+1);
 
-                    ctx.fillRect(Math.floor(j*blockSize+width/2-blockSize*pieceHolding[0].length/2)-50, Math.floor(i*blockSize+yAlign+newAlign/2), blockSize, blockSize);
+                    graphics.fillRect(hudOffset+Math.floor(j*blockSize+width/2-blockSize*pieceHolding[0].length/2)-75, Math.floor(i*blockSize+yAlign+newAlign/2), blockSize, blockSize);
                 }
             }
         }
 
         if (showTimer) {
-            ctx.fillStyle = "white";
+            graphics.fillStyle = "white";
 
             let minutes = `0${Math.floor(time/3600)%3600}`.slice(-2);
             let seconds = `0${Math.floor(time/60)%60}`.slice(-2);
             let milliseconds = `0${((time/60)%1).toString().substring(2, 4)}`.slice(-2);
 
-            ctx.fillText(`Time: ${minutes}:${seconds}.${milliseconds}`, hud.width/2+100, 50);
+            graphics.fillText(`Time: ${minutes}:${seconds}.${milliseconds}`, hudOffset-(trueOffset/2)+hudWidth/2, height/1.55);
         }
     }
-    
+
     let invisible = false;
 
     const gameLogic = () => {
@@ -996,7 +1004,7 @@ window.onload = () => {
     }
 
     let titleScreenImage = new Image();
-    titleScreenImage.src = "Images/titleScreen.png";
+    titleScreenImage.src = "Images/TitleScreen.png";
     let title = new Image();
     title.src = "Images/tetris.svg";
 
@@ -1010,8 +1018,7 @@ window.onload = () => {
     let games = ["Endless", "Marathon", "Sprint", "Invisible", "Master"];//, "Big", "ColorBlind", "Battle", ];
 
     const draw = (increment, score) => {
-        graphics.clearRect(0, 0, width, height);
-        ctx.clearRect(0, 0, hud.width, hud.height);
+        graphics.clearRect(0, 0, width+50+hudWidth, height);
 
         findState();
         gameLogic();
@@ -1281,9 +1288,22 @@ window.onload = () => {
         }
     }
 
+    const muteAudio = () => {
+        music.pause();
+        gameMusic.forEach(i => i.pause());
+    }
+
+    let muted = false;
+
     const update = () => {
         draw(blockSpeed*blockSpeedScale);
-        playAudio();
+
+        if (!muted) {
+            playAudio();
+        } else {
+            muteAudio();
+        }
+
         //draw(blockSize);
 
         requestAnimationFrame(update);
@@ -1393,4 +1413,13 @@ window.onload = () => {
             }
         }
     });
+
+    muteButton.onclick = () => {
+        if (muted) {
+            music.play();
+            muted = false;
+        } else {
+            muted = true;
+        }
+    }
 }
