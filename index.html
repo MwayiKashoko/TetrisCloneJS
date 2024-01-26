@@ -16,10 +16,6 @@
                 left: 600px;
             }
 
-            #hud {
-                left: 950px;
-            }
-
             button {
                 appearance: none;
                 background-color: #2ea44f;
@@ -36,7 +32,7 @@
                 line-height: 20px;
                 padding: 6px 16px;
                 position: relative;
-                top: 590px;
+                top: 630px;
                 text-align: center;
                 text-decoration: none;
                 user-select: none;
@@ -77,12 +73,14 @@
 
     <body>
         <canvas id="canvas" width="600" height="600"></canvas>
-
-        <canvas id="hud" width="200" height="800"></canvas> <br> <br>
         
         <button id="startButton">Play</button> <br> <br>
 
-	<button onclick="alert('Use the left and right arrow keys to move the piece, the up arrow key to rotate the piece right, x to rotate the piece left, the down arrow key to drop the piece down faster, z to instantly drop a piece to the board, and shift to hold a piece to use for later.')">Help</button>
+        <button id="muteButton" style="width: 62px;"><span style="margin-left: -2px !important;">Mute</span></button> <br> <br>
+
+        <button onclick="alert('Use the left and right arrow keys to move the piece, the up arrow key to rotate the piece right, x to rotate the piece left, the down arrow key to drop the piece down faster, z to instantly drop a piece to the board, and shift to hold a piece to use for later.')">Help</button> <br> <br>
+
+        <a href="../mysite.html">Back To My Website</a>
 
         <script src="Tetris.js"></script>
     </body>
