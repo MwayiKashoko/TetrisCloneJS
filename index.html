@@ -13,7 +13,8 @@
             canvas {
                 background-color: black;
                 position: fixed;
-                left: 600px;
+                left: 36vw;
+                width: 33vw;
             }
 
             button {
@@ -27,12 +28,12 @@
                 cursor: pointer;
                 display: inline-block;
                 font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
-                font-size: 14px;
+                font-size: 1vw;
                 font-weight: 600;
-                line-height: 20px;
-                padding: 6px 16px;
+                line-height: 1.2vw;
+                padding: 6px 1vw;
                 position: relative;
-                top: 630px;
+                top: 75vh;
                 text-align: center;
                 text-decoration: none;
                 user-select: none;
@@ -40,8 +41,8 @@
                 touch-action: manipulation;
                 vertical-align: middle;
                 white-space: nowrap;
-                left: 725px;
-                margin-right: 50px;
+                left: 43.49vw;
+                margin-right: 3.00vw;
             }
 
             button:focus:not(:focus-visible):not(.focus-visible) {
@@ -77,9 +78,11 @@
         
         <button id="startButton">Play</button>
 
-        <button id="muteButton" style="width: 62px;"><span style="margin-left: -2px !important;">Mute</span></button>
+        <button id="muteButton">Mute</button>
 
         <button onclick="alert('Use the left and right arrow keys to move the piece, the up arrow key to rotate the piece right, x to rotate the piece left, the down arrow key to drop the piece down faster, z to instantly drop a piece to the board, and shift to hold a piece to use for later.')">Help</button> <br> <br>
+
+        <a href="../mysite.html">Back To My Website</a>
 
         <script src="Tetris.js"></script>
     </body>
