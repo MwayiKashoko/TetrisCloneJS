@@ -1311,9 +1311,19 @@ window.onload = () => {
 
     update();
 
+    const getMousePos = (evt) => {
+		const rect = canvas.getBoundingClientRect();
+
+		return {
+			x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+			y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+		};
+	}
+
     canvas.addEventListener("click", mouse => {
-        let mouseX = mouse.offsetX;
-        let mouseY = mouse.offsetY;
+        let m = getMousePos(mouse);
+		let mouseX = m.x;
+		let mouseY = m.y;
 
         let buttonHeight = height/(games.length*2);
 
